@@ -132,16 +132,7 @@ $$
 Thom correlation is used:
 
 $$
-T_{thom}
-=
-T_{sat}
-+
-22.5
-\sqrt{q''}
-\exp
-\left(
--\frac{P}{8.7}
-\right)
+T_{\text {thom }, i}=T_{\text {sat }}+22.5 \sqrt{q_{M W, i}^{\prime \prime}} \exp \left(-\frac{P_{M P a}}{8.7}\right)
 $$
 
 This allows prediction of subcooled boiling onset.
@@ -182,6 +173,4 @@ Optional:
 
 ## How to Run
 
-Run the script:
-
-Open the script in matlab and run
+Run the script using matlab
