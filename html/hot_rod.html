@@ -1,0 +1,617 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>hot_rod</title>
+<meta name="generator" content="MATLAB 24.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2026-02-25">
+<meta name="DC.source" content="hot_rod.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Thermal-Hydraulics Assignment - using hot rod linear power density</a>
+</li>
+<li>
+<a href="#2">Approach</a>
+</li>
+<li>
+<a href="#4">Axial Power Distribution and Energy Balance</a>
+</li>
+<li>
+<a href="#5">Convective Heat Transfer</a>
+</li>
+<li>
+<a href="#6">Radial Heat Conduction</a>
+</li>
+<li>
+<a href="#7">Nucleate Boiling Limit</a>
+</li>
+<li>
+<a href="#9">Plots</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Thermal-Hydraulics Assignment - using hot rod linear power density</h2>
+<p>Author:Joel Minj</p>
+<pre class="codeinput">clear; clc;
+</pre>
+<h2 id="2">Approach</h2>
+<p>A one-dimensional, steady-state thermal-hydraulics analysis was performed for the hot channel of a Pressurized Water Reactor (PWR). The active core height was discretized into <img src="hot_rod_eq05705075896852816573.png" alt="$N$"> equal axial nodes of length <img src="hot_rod_eq12824558268443985312.png" alt="$L_{node}$">.</p>
+<p>The analysis evaluates:</p>
+<div>
+<ul>
+<li>Axial coolant enthalpy rise</li>
+<li>Convective heat transfer at the cladding surface</li>
+<li>Radial temperature profile from cladding outer surface to fuel centerline</li>
+</ul>
+</div>
+<pre class="codeinput">
+<span class="comment">% Reactor parameters for PWR-5</span>
+thermalPower = 2000e6; <span class="comment">% Total thermal power (W)</span>
+numFuelAssemblies = 157; <span class="comment">% Number of fuel assemblies</span>
+numRodsPerAssembly = 225; <span class="comment">% Number of rods per fuel assembly</span>
+nonActiveRods = 21; <span class="comment">% Non active rods per assembly</span>
+pitch = 1.43e-2; <span class="comment">% Pitch (m)</span>
+outerRadiusClad = 5.27e-3; <span class="comment">% Cladding outer radius (m)</span>
+coreHeight = 3.66; <span class="comment">% Core active height (m)</span>
+coolantFlowRate = 13067.48; <span class="comment">% Coolant mass flow rate (kg/s)</span>
+coolantPressure = 152; <span class="comment">% Coolant pressure (bar)</span>
+coolantInletTempC = 285; <span class="comment">% Coolant inlet temperature (&deg;C)</span>
+radialFactor = 1.9; <span class="comment">% Nuclear radial factor for hot rod</span>
+P_MPa = coolantPressure / 10;
+
+<span class="comment">% Reactor parameters</span>
+nodeCount = 10; <span class="comment">% Number of axial nodes</span>
+claddingThickness = 0.5e-3; <span class="comment">% Cladding thickness (m)</span>
+gapThickness = 0.08e-3; <span class="comment">% Gap thickness (m)</span>
+kClad = 18.0; <span class="comment">% Cladding thermal conductivity (W/mK)</span>
+kGap = 0.25; <span class="comment">% Gap conductivity (W/mK)</span>
+kFuel = 2.8; <span class="comment">% Fuel thermal conductivity (W/mK)</span>
+
+
+
+
+<span class="comment">% Number of active channels</span>
+totalChannels = numFuelAssemblies * (numRodsPerAssembly - nonActiveRods);
+
+<span class="comment">% Coolant flow per channel</span>
+coolantFlowRatePerChannel = coolantFlowRate / totalChannels;
+
+<span class="comment">% Axial Power Profile (BOL)</span>
+nodePowerFactors = [0.44, 1.03, 1.28, 1.39, 1.41, 1.28, 1.14, 0.92, 0.78, 0.33];
+
+<span class="comment">% Rod node area</span>
+areaRod = pitch^2 - (pi * outerRadiusClad^2); <span class="comment">% Rod area (m^2)</span>
+
+<span class="comment">% Cladding area</span>
+areaClad = 2 * pi * outerRadiusClad * coreHeight;
+
+<span class="comment">% Axial node surface area</span>
+L_node = coreHeight / nodeCount; <span class="comment">% Length of one node</span>
+nodeSurfaceArea = 2 * pi * outerRadiusClad * L_node; <span class="comment">% Heat transfer area per node</span>
+
+<span class="comment">% Hydraulic Diameter Calculation</span>
+A_flow = pitch^2 - pi * outerRadiusClad^2; <span class="comment">% Flow area per channel</span>
+P_wet = 2 * pi * outerRadiusClad; <span class="comment">% Wetted perimeter</span>
+D_h = (4 * A_flow) / P_wet; <span class="comment">% Hydraulic diameter</span>
+
+<span class="comment">% Average rod linear power density</span>
+avgRodPowerLinDen = thermalPower / (coreHeight * totalChannels);
+
+<span class="comment">% Hot rod linear power density</span>
+hotRodPower = avgRodPowerLinDen * radialFactor;
+
+<span class="comment">% Saturation temprature</span>
+T_sat = XSteam(<span class="string">'Tsat_p'</span>, coolantPressure) + 273.15;
+
+<span class="comment">% Preallocating arrays</span>
+nodePower = zeros(1, nodeCount);
+nodeHeatFlux = zeros(1, nodeCount);
+nodeEnthalpyIn = zeros(1, nodeCount);
+nodeEnthalpyOut = zeros(1, nodeCount);
+coolantInTempC = zeros(1, nodeCount + 1);
+coolantOutTempC = zeros(1, nodeCount);
+coolantInTempC(1) = coolantInletTempC;
+avgCoolantTempC = zeros(1, nodeCount);
+coolantDensity = zeros(1, nodeCount);
+fluidVelocity = zeros(1, nodeCount);
+fluidViscosity = zeros(1, nodeCount);
+Re = zeros(1, nodeCount);
+Cp = zeros(1, nodeCount);
+Prandtl = zeros(1, nodeCount);
+thermalCond = zeros(1, nodeCount);
+Nu = zeros(1, nodeCount);
+h_Dittus = zeros(1, nodeCount);
+h_Bernath = zeros(1, nodeCount);
+h_Thom = zeros(1, nodeCount);
+cladTempDittus = zeros(1, nodeCount);
+cladTempBernath = zeros(1, nodeCount);
+T_zr = zeros(1, nodeCount);
+T_u = zeros(1, nodeCount);
+T_c = zeros(1, nodeCount);
+T_thom = zeros(1, nodeCount);
+T_bulk = zeros(1, nodeCount);
+
+
+
+
+<span class="comment">% Loop through nodes</span>
+<span class="keyword">for</span> i = 1:nodeCount
+</pre>
+<h2 id="4">Axial Power Distribution and Energy Balance</h2>
+<p>The heat generated in node <img src="hot_rod_eq08984912804010224726.png" alt="$i$"> is:</p>
+<p>
+<img src="hot_rod_eq18305851771424453425.png" alt="$$ q_i = \bar{q}'_{hot} L_{node} F_{z,i} $$"></p>
+<p>The surface heat flux is:</p>
+<p>
+<img src="hot_rod_eq17376805270325614067.png" alt="$$ q''_i = \frac{q_i}{2 \pi r_{co} L_{node}} $$"></p>
+<p>The coolant enthalpy rise is:</p>
+<p>
+<img src="hot_rod_eq03092672817703336843.png" alt="$$ h_{out,i} = h_{in,i} + \frac{q_i}{\dot{m}_{ch}} $$"></p>
+<pre class="codeinput">    nodePower(i) = hotRodPower * (coreHeight / nodeCount) * nodePowerFactors(i); <span class="comment">% Power (W)</span>
+
+    <span class="comment">% Heat flux (converted to MW/m^2)</span>
+    nodeHeatFlux(i) = nodePower(i) / nodeSurfaceArea / 1e6; <span class="comment">% Heat flux in MW/m^2</span>
+
+    <span class="comment">% Enthalpy in (J/kg)</span>
+    nodeEnthalpyIn(i) = XSteam(<span class="string">'h_pT'</span>, coolantPressure, coolantInTempC(i));
+
+    <span class="comment">% Enthalpy out (J/kg)</span>
+    nodeEnthalpyOut(i) = (nodePower(i)/1000) / coolantFlowRatePerChannel + nodeEnthalpyIn(i);
+
+    <span class="comment">% Update inelet coolant temperature in (C)</span>
+    coolantInTempC(i + 1) = XSteam(<span class="string">'T_ph'</span>, coolantPressure, nodeEnthalpyOut(i));
+
+    <span class="comment">% Update outlet coolant tempratuere in (C)</span>
+    coolantOutTempC(i) = coolantInTempC(i+1);
+
+    <span class="comment">% Average coolant temperature</span>
+    avgCoolantTempC(i) = (coolantOutTempC(i) + coolantInTempC(i)) / 2;
+
+    <span class="comment">% Coolant density in (kg/m^3)</span>
+    coolantDensity(i) = XSteam(<span class="string">'rho_pT'</span>, coolantPressure, avgCoolantTempC(i));
+
+    <span class="comment">% Fluid velocity in (m/s)</span>
+    fluidVelocity(i) = coolantFlowRatePerChannel / (areaRod * coolantDensity(i));
+    v_ft_s = fluidVelocity(i) * 3.28084; <span class="comment">% Fluid velocity in ft/s</span>
+
+    <span class="comment">% Fluid viscosity in (Pa*s)</span>
+    fluidViscosity(i) = XSteam(<span class="string">'my_pT'</span>, coolantPressure, avgCoolantTempC (i));
+
+    <span class="comment">% Reynolds number</span>
+    Re(i) = (coolantDensity(i) * fluidVelocity(i) * D_h) / fluidViscosity(i);
+
+    <span class="comment">% Specific isobaric heat capacity in J/(kg &deg;C)</span>
+    Cp(i) = XSteam(<span class="string">'Cp_pT'</span>, coolantPressure, avgCoolantTempC(i)) * 1e3;
+
+    <span class="comment">% Thermal conductivity in W/(m &deg;C)</span>
+    thermalCond(i) = XSteam(<span class="string">'tc_pT'</span>, coolantPressure, avgCoolantTempC(i));
+
+    <span class="comment">% Prandtl number</span>
+    Prandtl(i) = Cp(i) * fluidViscosity(i) / thermalCond(i);
+
+    <span class="comment">% Nusselt number</span>
+    Nu(i) = 0.023 * Re(i)^0.8 * Prandtl(i)^0.4;
+</pre>
+<h2 id="5">Convective Heat Transfer</h2>
+<p>Dittus-Boelter correlation:</p>
+<p>
+<img src="hot_rod_eq09838296881609702066.png" alt="$$ Nu = 0.023 Re^{0.8} Pr^{0.4} $$"></p>
+<p>
+<img src="hot_rod_eq02918048384579924955.png" alt="$$ h_{DB} = \frac{Nu \cdot k_{fluid}}{D_h} $$"></p>
+<p>Bernath correlation:</p>
+<p>
+<img src="hot_rod_eq13242600162570221134.png" alt="$$ h_{Bernath} =&#10;10890 \left( \frac{D_e}{D_e + D_i} \right)&#10;+ \frac{48 V}{D_e^{0.6}} $$"></p>
+<pre class="codeinput">    <span class="comment">% Dittus-Boelter correlation &amp; cladding temprature</span>
+    h_Dittus(i) = Nu(i) * thermalCond(i) / D_h;
+    cladTempDittus(i) = (nodePower(i) / (h_Dittus(i) * nodeSurfaceArea)) + avgCoolantTempC(i) + 273.15; <span class="comment">% Dittus-Boelter cladding temprature in K</span>
+
+    <span class="comment">% Bernath correlation</span>
+    D_e = D_h * 3.28084; <span class="comment">% Hydraulic equivalent diameter in feet</span>
+    D_i = (2 * outerRadiusClad) * 3.28084; <span class="comment">% Heated rod diameter in feet</span>
+    h_Bernath(i) = (10890 * (D_e / (D_e + D_i)) + (48 * v_ft_s / D_e^0.6)) * 5.678263;
+    cladTempBernath(i) = (nodePower(i) / (h_Bernath(i) * nodeSurfaceArea)) + avgCoolantTempC(i) + 273.15; <span class="comment">% Bernath cladding temperature in K</span>
+</pre>
+<h2 id="6">Radial Heat Conduction</h2>
+<p>Cladding inner temperature:</p>
+<p>
+<img src="hot_rod_eq05092749471750678435.png" alt="$$ T_{ci,i} =&#10;T_{co,i} +&#10;\frac{q_i \ln(r_{co}/r_{ci})}&#10;{2 \pi k_{clad} L_{node}} $$"></p>
+<p>Fuel outer temperature:</p>
+<p>
+<img src="hot_rod_eq15997451944602933168.png" alt="$$ T_{fo,i} =&#10;T_{ci,i} +&#10;\frac{q_i \ln(r_{ci}/r_{fo})}&#10;{2 \pi k_{gap} L_{node}} $$"></p>
+<p>Fuel centerline temperature:</p>
+<p>
+<img src="hot_rod_eq03563759796474705519.png" alt="$$ T_{c,i} =&#10;T_{fo,i} +&#10;\frac{q_i}&#10;{4 \pi k_{fuel} L_{node}} $$"></p>
+<pre class="codeinput">    <span class="comment">% Temprature Calculation</span>
+    T_zr(i) = (log(outerRadiusClad / (outerRadiusClad - claddingThickness)) / (2 * pi * kClad * L_node)) * nodePower(i) + cladTempBernath(i); <span class="comment">% Cladding temprature drop</span>
+    T_u(i) = (log((outerRadiusClad - claddingThickness) / (outerRadiusClad - claddingThickness - gapThickness)) / (2 * pi * kGap * L_node)) * nodePower(i) + T_zr(i); <span class="comment">% Gap temprature drop</span>
+    T_c(i) = T_u(i) + (nodePower(i) / (4 * pi * kFuel * L_node)); <span class="comment">% Centerline temprature drop</span>
+</pre>
+<h2 id="7">Nucleate Boiling Limit</h2>
+<p>Thom correlation:</p>
+<p>
+<img src="hot_rod_eq17148324011799259541.png" alt="$$ T_{thom,i} =&#10;T_{sat}&#10;+ 22.5 \sqrt{q''_{MW,i}}&#10;\exp\left(-\frac{P_{MPa}}{8.7}\right) $$"></p>
+<pre class="codeinput">    T_thom(i) = 22.5 * (nodeHeatFlux(i)^0.5 * exp(- P_MPa / 8.7)) + T_sat; <span class="comment">% Thom's Correlation for nucleate boiling</span>
+    T_bulk(i) = coolantOutTempC(i) + 273.15;
+</pre>
+<pre class="codeinput">
+<span class="keyword">end</span>
+</pre>
+<h2 id="9">Plots</h2>
+<pre class="codeinput">
+<span class="comment">% Comparing Bulk Temp, Saturation Temp, and Cladding Temperatures</span>
+figure;
+hold <span class="string">on</span>;
+plot(1:nodeCount, T_bulk, <span class="string">'-o'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [0, 0.4470, 0.7410], <span class="string">'DisplayName'</span>, <span class="string">'Bulk Temp (K)'</span>);
+plot(1:nodeCount, T_sat * ones(1, nodeCount), <span class="string">'--'</span>, <span class="string">'LineWidth'</span>, 3, <span class="string">'Color'</span>, [0.8500, 0.3250, 0.0980], <span class="string">'DisplayName'</span>, <span class="string">'Saturation Temp (K)'</span>); <span class="comment">% Increased LineWidth</span>
+plot(1:nodeCount, cladTempDittus, <span class="string">'-s'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [0.9290, 0.6940, 0.1250], <span class="string">'DisplayName'</span>, <span class="string">'Cladding Temp (Dittus-Boelter)'</span>);
+plot(1:nodeCount, cladTempBernath, <span class="string">'-d'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [0.4940, 0.1840, 0.5560], <span class="string">'DisplayName'</span>, <span class="string">'Cladding Temp (Bernath)'</span>);
+plot(1:nodeCount, T_thom, <span class="string">'-x'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [0.4660, 0.6740, 0.1880], <span class="string">'DisplayName'</span>, <span class="string">'Thom Temp (K)'</span>);
+xlabel(<span class="string">'Axial Node'</span>);
+ylabel(<span class="string">'Temperature (K)'</span>);
+title(<span class="string">'Comparison of Bulk and Cladding Temperatures'</span>);
+legend(<span class="string">'Location'</span>, <span class="string">'NorthWest'</span>, <span class="string">'FontSize'</span>, 10);
+grid <span class="string">on</span>;
+set(gca, <span class="string">'FontSize'</span>, 12);
+
+
+<span class="comment">% Comparing Bulk Temp, Saturation Temp, Cladding Temp, and Fuel Temps</span>
+figure;
+hold <span class="string">on</span>;
+plot(1:nodeCount, T_bulk, <span class="string">'-o'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [0, 0.4470, 0.7410], <span class="string">'DisplayName'</span>, <span class="string">'Bulk Temp (K)'</span>);
+plot(1:nodeCount, T_sat * ones(1, nodeCount), <span class="string">'--'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [0.8500, 0.3250, 0.0980], <span class="string">'DisplayName'</span>, <span class="string">'Saturation Temp (K)'</span>);
+plot(1:nodeCount, cladTempDittus, <span class="string">'-s'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [0.9290, 0.6940, 0.1250], <span class="string">'DisplayName'</span>, <span class="string">'Cladding Temp (Dittus-Boelter)'</span>);
+plot(1:nodeCount, T_u, <span class="string">'-^'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [0.4940, 0.1840, 0.5560], <span class="string">'DisplayName'</span>, <span class="string">'Fuel Out Temp (K)'</span>);
+plot(1:nodeCount, T_c, <span class="string">'-p'</span>, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [0.4660, 0.6740, 0.1880], <span class="string">'DisplayName'</span>, <span class="string">'Fuel Centerline Temp (K)'</span>);
+xlabel(<span class="string">'Axial Node'</span>);
+ylabel(<span class="string">'Temperature (K)'</span>);
+title(<span class="string">'Comparison of Bulk, Cladding, and Fuel Temperatures'</span>);
+legend(<span class="string">'Location'</span>, <span class="string">'NorthWest'</span>, <span class="string">'FontSize'</span>, 10);
+grid <span class="string">on</span>;
+set(gca, <span class="string">'FontSize'</span>, 12);
+</pre>
+<img vspace="5" hspace="5" src="hot_rod_01.png" alt=""> <img vspace="5" hspace="5" src="hot_rod_02.png" alt=""> <p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%% Thermal-Hydraulics Assignment - using hot rod linear power density
+% Author:Joel Minj
+
+clear; clc;
+
+%% Approach
+% A one-dimensional, steady-state thermal-hydraulics analysis was performed
+% for the hot channel of a Pressurized Water Reactor (PWR). The active core
+% height was discretized into $N$ equal axial nodes of length $L_{node}$.
+%
+% The analysis evaluates:
+%
+% * Axial coolant enthalpy rise
+% * Convective heat transfer at the cladding surface
+% * Radial temperature profile from cladding outer surface to fuel centerline
+
+% Reactor parameters for PWR-5
+thermalPower = 2000e6; % Total thermal power (W)
+numFuelAssemblies = 157; % Number of fuel assemblies
+numRodsPerAssembly = 225; % Number of rods per fuel assembly
+nonActiveRods = 21; % Non active rods per assembly
+pitch = 1.43e-2; % Pitch (m)
+outerRadiusClad = 5.27e-3; % Cladding outer radius (m)
+coreHeight = 3.66; % Core active height (m)
+coolantFlowRate = 13067.48; % Coolant mass flow rate (kg/s)
+coolantPressure = 152; % Coolant pressure (bar)
+coolantInletTempC = 285; % Coolant inlet temperature (°C)
+radialFactor = 1.9; % Nuclear radial factor for hot rod
+P_MPa = coolantPressure / 10;
+
+% Reactor parameters
+nodeCount = 10; % Number of axial nodes
+claddingThickness = 0.5e-3; % Cladding thickness (m)
+gapThickness = 0.08e-3; % Gap thickness (m)
+kClad = 18.0; % Cladding thermal conductivity (W/mK)
+kGap = 0.25; % Gap conductivity (W/mK)
+kFuel = 2.8; % Fuel thermal conductivity (W/mK)
+
+
+
+
+% Number of active channels
+totalChannels = numFuelAssemblies * (numRodsPerAssembly - nonActiveRods);
+
+% Coolant flow per channel
+coolantFlowRatePerChannel = coolantFlowRate / totalChannels;
+
+% Axial Power Profile (BOL)
+nodePowerFactors = [0.44, 1.03, 1.28, 1.39, 1.41, 1.28, 1.14, 0.92, 0.78, 0.33];
+
+% Rod node area
+areaRod = pitch^2 - (pi * outerRadiusClad^2); % Rod area (m^2)
+
+% Cladding area
+areaClad = 2 * pi * outerRadiusClad * coreHeight;
+
+% Axial node surface area
+L_node = coreHeight / nodeCount; % Length of one node
+nodeSurfaceArea = 2 * pi * outerRadiusClad * L_node; % Heat transfer area per node
+
+% Hydraulic Diameter Calculation
+A_flow = pitch^2 - pi * outerRadiusClad^2; % Flow area per channel
+P_wet = 2 * pi * outerRadiusClad; % Wetted perimeter
+D_h = (4 * A_flow) / P_wet; % Hydraulic diameter
+
+% Average rod linear power density
+avgRodPowerLinDen = thermalPower / (coreHeight * totalChannels);
+
+% Hot rod linear power density
+hotRodPower = avgRodPowerLinDen * radialFactor;
+
+% Saturation temprature
+T_sat = XSteam('Tsat_p', coolantPressure) + 273.15;
+
+% Preallocating arrays
+nodePower = zeros(1, nodeCount);
+nodeHeatFlux = zeros(1, nodeCount);
+nodeEnthalpyIn = zeros(1, nodeCount);
+nodeEnthalpyOut = zeros(1, nodeCount);
+coolantInTempC = zeros(1, nodeCount + 1);
+coolantOutTempC = zeros(1, nodeCount);
+coolantInTempC(1) = coolantInletTempC;
+avgCoolantTempC = zeros(1, nodeCount);
+coolantDensity = zeros(1, nodeCount); 
+fluidVelocity = zeros(1, nodeCount);
+fluidViscosity = zeros(1, nodeCount);
+Re = zeros(1, nodeCount);
+Cp = zeros(1, nodeCount);
+Prandtl = zeros(1, nodeCount);
+thermalCond = zeros(1, nodeCount);
+Nu = zeros(1, nodeCount);
+h_Dittus = zeros(1, nodeCount);
+h_Bernath = zeros(1, nodeCount);
+h_Thom = zeros(1, nodeCount);
+cladTempDittus = zeros(1, nodeCount);
+cladTempBernath = zeros(1, nodeCount);
+T_zr = zeros(1, nodeCount);
+T_u = zeros(1, nodeCount);
+T_c = zeros(1, nodeCount);
+T_thom = zeros(1, nodeCount);
+T_bulk = zeros(1, nodeCount);
+
+
+
+
+% Loop through nodes
+for i = 1:nodeCount
+
+%% Axial Power Distribution and Energy Balance
+%
+% The heat generated in node $i$ is:
+%
+% $$ q_i = \bar{q}'_{hot} L_{node} F_{z,i} $$
+%
+% The surface heat flux is:
+%
+% $$ q''_i = \frac{q_i}{2 \pi r_{co} L_{node}} $$
+%
+% The coolant enthalpy rise is:
+%
+% $$ h_{out,i} = h_{in,i} + \frac{q_i}{\dot{m}_{ch}} $$
+
+    nodePower(i) = hotRodPower * (coreHeight / nodeCount) * nodePowerFactors(i); % Power (W)
+    
+    % Heat flux (converted to MW/m^2)
+    nodeHeatFlux(i) = nodePower(i) / nodeSurfaceArea / 1e6; % Heat flux in MW/m^2
+    
+    % Enthalpy in (J/kg)
+    nodeEnthalpyIn(i) = XSteam('h_pT', coolantPressure, coolantInTempC(i));
+    
+    % Enthalpy out (J/kg)
+    nodeEnthalpyOut(i) = (nodePower(i)/1000) / coolantFlowRatePerChannel + nodeEnthalpyIn(i);
+    
+    % Update inelet coolant temperature in (C)
+    coolantInTempC(i + 1) = XSteam('T_ph', coolantPressure, nodeEnthalpyOut(i));
+
+    % Update outlet coolant tempratuere in (C)
+    coolantOutTempC(i) = coolantInTempC(i+1);
+
+    % Average coolant temperature
+    avgCoolantTempC(i) = (coolantOutTempC(i) + coolantInTempC(i)) / 2;
+
+    % Coolant density in (kg/m^3)
+    coolantDensity(i) = XSteam('rho_pT', coolantPressure, avgCoolantTempC(i));
+
+    % Fluid velocity in (m/s)
+    fluidVelocity(i) = coolantFlowRatePerChannel / (areaRod * coolantDensity(i));
+    v_ft_s = fluidVelocity(i) * 3.28084; % Fluid velocity in ft/s
+
+    % Fluid viscosity in (Pa*s)
+    fluidViscosity(i) = XSteam('my_pT', coolantPressure, avgCoolantTempC (i));
+
+    % Reynolds number
+    Re(i) = (coolantDensity(i) * fluidVelocity(i) * D_h) / fluidViscosity(i);
+
+    % Specific isobaric heat capacity in J/(kg °C)
+    Cp(i) = XSteam('Cp_pT', coolantPressure, avgCoolantTempC(i)) * 1e3;
+
+    % Thermal conductivity in W/(m °C)
+    thermalCond(i) = XSteam('tc_pT', coolantPressure, avgCoolantTempC(i));
+
+    % Prandtl number
+    Prandtl(i) = Cp(i) * fluidViscosity(i) / thermalCond(i);
+
+    % Nusselt number
+    Nu(i) = 0.023 * Re(i)^0.8 * Prandtl(i)^0.4;
+
+    %% Convective Heat Transfer
+%
+% Dittus-Boelter correlation:
+%
+% $$ Nu = 0.023 Re^{0.8} Pr^{0.4} $$
+%
+% $$ h_{DB} = \frac{Nu \cdot k_{fluid}}{D_h} $$
+%
+% Bernath correlation:
+%
+% $$ h_{Bernath} =
+% 10890 \left( \frac{D_e}{D_e + D_i} \right)
+% + \frac{48 V}{D_e^{0.6}} $$
+
+    % Dittus-Boelter correlation & cladding temprature
+    h_Dittus(i) = Nu(i) * thermalCond(i) / D_h;
+    cladTempDittus(i) = (nodePower(i) / (h_Dittus(i) * nodeSurfaceArea)) + avgCoolantTempC(i) + 273.15; % Dittus-Boelter cladding temprature in K
+
+    % Bernath correlation
+    D_e = D_h * 3.28084; % Hydraulic equivalent diameter in feet
+    D_i = (2 * outerRadiusClad) * 3.28084; % Heated rod diameter in feet
+    h_Bernath(i) = (10890 * (D_e / (D_e + D_i)) + (48 * v_ft_s / D_e^0.6)) * 5.678263;
+    cladTempBernath(i) = (nodePower(i) / (h_Bernath(i) * nodeSurfaceArea)) + avgCoolantTempC(i) + 273.15; % Bernath cladding temperature in K
+%% Radial Heat Conduction
+%
+% Cladding inner temperature:
+%
+% $$ T_{ci,i} =
+% T_{co,i} +
+% \frac{q_i \ln(r_{co}/r_{ci})}
+% {2 \pi k_{clad} L_{node}} $$
+%
+% Fuel outer temperature:
+%
+% $$ T_{fo,i} =
+% T_{ci,i} +
+% \frac{q_i \ln(r_{ci}/r_{fo})}
+% {2 \pi k_{gap} L_{node}} $$
+%
+% Fuel centerline temperature:
+%
+% $$ T_{c,i} =
+% T_{fo,i} +
+% \frac{q_i}
+% {4 \pi k_{fuel} L_{node}} $$
+
+    % Temprature Calculation
+    T_zr(i) = (log(outerRadiusClad / (outerRadiusClad - claddingThickness)) / (2 * pi * kClad * L_node)) * nodePower(i) + cladTempBernath(i); % Cladding temprature drop
+    T_u(i) = (log((outerRadiusClad - claddingThickness) / (outerRadiusClad - claddingThickness - gapThickness)) / (2 * pi * kGap * L_node)) * nodePower(i) + T_zr(i); % Gap temprature drop
+    T_c(i) = T_u(i) + (nodePower(i) / (4 * pi * kFuel * L_node)); % Centerline temprature drop
+%% Nucleate Boiling Limit
+%
+% Thom correlation:
+%
+% $$ T_{thom,i} =
+% T_{sat}
+% + 22.5 \sqrt{q''_{MW,i}}
+% \exp\left(-\frac{P_{MPa}}{8.7}\right) $$    
+    T_thom(i) = 22.5 * (nodeHeatFlux(i)^0.5 * exp(- P_MPa / 8.7)) + T_sat; % Thom's Correlation for nucleate boiling
+    T_bulk(i) = coolantOutTempC(i) + 273.15;
+end 
+
+%% Plots
+
+% Comparing Bulk Temp, Saturation Temp, and Cladding Temperatures
+figure;
+hold on;
+plot(1:nodeCount, T_bulk, '-o', 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410], 'DisplayName', 'Bulk Temp (K)');
+plot(1:nodeCount, T_sat * ones(1, nodeCount), 'REPLACE_WITH_DASH_DASH', 'LineWidth', 3, 'Color', [0.8500, 0.3250, 0.0980], 'DisplayName', 'Saturation Temp (K)'); % Increased LineWidth
+plot(1:nodeCount, cladTempDittus, '-s', 'LineWidth', 2, 'Color', [0.9290, 0.6940, 0.1250], 'DisplayName', 'Cladding Temp (Dittus-Boelter)');
+plot(1:nodeCount, cladTempBernath, '-d', 'LineWidth', 2, 'Color', [0.4940, 0.1840, 0.5560], 'DisplayName', 'Cladding Temp (Bernath)');
+plot(1:nodeCount, T_thom, '-x', 'LineWidth', 2, 'Color', [0.4660, 0.6740, 0.1880], 'DisplayName', 'Thom Temp (K)');
+xlabel('Axial Node');
+ylabel('Temperature (K)');
+title('Comparison of Bulk and Cladding Temperatures');
+legend('Location', 'NorthWest', 'FontSize', 10);
+grid on;
+set(gca, 'FontSize', 12);
+
+
+% Comparing Bulk Temp, Saturation Temp, Cladding Temp, and Fuel Temps
+figure;
+hold on;
+plot(1:nodeCount, T_bulk, '-o', 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410], 'DisplayName', 'Bulk Temp (K)');
+plot(1:nodeCount, T_sat * ones(1, nodeCount), 'REPLACE_WITH_DASH_DASH', 'LineWidth', 2, 'Color', [0.8500, 0.3250, 0.0980], 'DisplayName', 'Saturation Temp (K)');
+plot(1:nodeCount, cladTempDittus, '-s', 'LineWidth', 2, 'Color', [0.9290, 0.6940, 0.1250], 'DisplayName', 'Cladding Temp (Dittus-Boelter)');
+plot(1:nodeCount, T_u, '-^', 'LineWidth', 2, 'Color', [0.4940, 0.1840, 0.5560], 'DisplayName', 'Fuel Out Temp (K)');
+plot(1:nodeCount, T_c, '-p', 'LineWidth', 2, 'Color', [0.4660, 0.6740, 0.1880], 'DisplayName', 'Fuel Centerline Temp (K)');
+xlabel('Axial Node');
+ylabel('Temperature (K)');
+title('Comparison of Bulk, Cladding, and Fuel Temperatures');
+legend('Location', 'NorthWest', 'FontSize', 10);
+grid on;
+set(gca, 'FontSize', 12);
+
+##### SOURCE END #####
+-->
+</body>
+</html>
