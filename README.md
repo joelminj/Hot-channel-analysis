@@ -160,3 +160,28 @@ This allows prediction of subcooled boiling onset.
 ---
 
 ## Code Structure
+
+hot_rod.m
+
+
+Main script performing thermal-hydraulic calculations.
+
+---
+
+## Requirements
+
+Software:
+
+- MATLAB R2020 or newer
+
+Optional:
+
+- XSteam or steam table library
+
+---
+
+## How to Run
+
+Run the script:
+
+Open the script in matlab and run
