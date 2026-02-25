@@ -25,16 +25,16 @@ The following physical phenomena are modeled:
 
 The axial heat generation rate is calculated using a chopped cosine power profile:
 
-\[
+$$
 q_i = \bar{q}'_{hot} L_{node} F_{z,i}
-\]
+$$
 
 Surface heat flux:
 
-\[
+$$
 q''_i =
 \frac{q_i}{2 \pi r_{co} L_{node}}
-\]
+$$
 
 ---
 
@@ -42,12 +42,12 @@ q''_i =
 
 The coolant enthalpy rise is calculated using:
 
-\[
+$$
 h_{out,i} =
 h_{in,i}
 +
 \frac{q_i}{\dot{m}_{ch}}
-\]
+$$
 
 Fluid properties are evaluated at bulk coolant temperature.
 
@@ -59,21 +59,21 @@ Two correlations are implemented:
 
 #### Dittus-Boelter correlation
 
-\[
+$$
 Nu =
 0.023 Re^{0.8} Pr^{0.4}
-\]
+$$
 
-\[
+$$
 h =
 \frac{Nu k}{D_h}
-\]
+$$
 
 #### Bernath correlation
 
 Applicable for subcooled and extended boiling regimes:
 
-\[
+$$
 h =
 10890
 \left(
@@ -81,7 +81,7 @@ h =
 \right)
 +
 \frac{48 V}{D_e^{0.6}}
-\]
+$$
 
 The limiting heat transfer coefficient is used.
 
@@ -97,33 +97,33 @@ Radial conduction is solved across:
 
 Cladding inner temperature:
 
-\[
+$$
 T_{ci} =
 T_{co}
 +
 \frac{q_i \ln(r_{co}/r_{ci})}
 {2 \pi k_{clad} L}
-\]
+$$
 
 Fuel outer temperature:
 
-\[
+$$
 T_{fo} =
 T_{ci}
 +
 \frac{q_i \ln(r_{ci}/r_{fo})}
 {2 \pi k_{gap} L}
-\]
+$$
 
 Fuel centerline temperature:
 
-\[
+$$
 T_c =
 T_{fo}
 +
 \frac{q_i}
 {4 \pi k_{fuel} L}
-\]
+$$
 
 ---
 
@@ -131,7 +131,7 @@ T_{fo}
 
 Thom correlation is used:
 
-\[
+$$
 T_{thom}
 =
 T_{sat}
@@ -142,7 +142,7 @@ T_{sat}
 \left(
 -\frac{P}{8.7}
 \right)
-\]
+$$
 
 This allows prediction of subcooled boiling onset.
 
