@@ -146,4 +146,4 @@ This allows prediction of subcooled boiling onset.
 
 ## How to Run
 
-Run the script using matlab
+Add X Steam to MATLAB before running: https://www.mathworks.com/matlabcentral/fileexchange/9817-x-steam-thermodynamic-properties-of-water-and-steam
