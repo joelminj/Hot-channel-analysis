@@ -13,6 +13,11 @@ The objective is to evaluate:
 
 The model resolves the temperature profile from the coolant bulk to the fuel centerline under nominal operating conditions.
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/2402191b-45e6-4220-b705-107ef907d10e" width="45%" />
+  <img src="https://github.com/user-attachments/assets/c3b5cc09-d913-4448-aded-be8518e9d9b9" width="45%" />
+</p>
+
 ---
 
 ## Physical Model
@@ -136,38 +141,6 @@ T_{\text {thom }, i}=T_{\text {sat }}+22.5 \sqrt{q_{M W, i}^{\prime \prime}} \ex
 $$
 
 This allows prediction of subcooled boiling onset.
-
----
-
-## Features
-
-- Axial coolant temperature distribution
-- Fuel centerline temperature calculation
-- Cladding temperature prediction
-- Heat transfer coefficient evaluation
-- Boiling onset prediction
-- Multiple heat transfer correlations
-
----
-
-## Code Structure
-
-hot_rod.m
-
-
-Main script performing thermal-hydraulic calculations.
-
----
-
-## Requirements
-
-Software:
-
-- MATLAB R2020 or newer
-
-Optional:
-
-- XSteam or steam table library
 
 ---
 
